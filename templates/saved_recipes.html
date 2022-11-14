@@ -1,0 +1,38 @@
+{% extends "base.html" %} {% block title %}My Saved Recipes{% endblock %} {%
+block content %}
+<div class="container mt-2" style="background-color: #fff;height: 100vh">
+  <h1 class="py-3">My Saved Recipes</h1>
+{% if recipes|length == 0 %}
+<div class="alert alert-dark" role="alert">
+  You haven't saved any recipes yet
+</div>
+{% endif %}
+  <div class="accordion" id="accordionExample">
+    {% for recipe in recipes %}
+    <div class="card">
+      <div class="card-header">
+        <h4 class="mb-0">
+          <button
+          id="close-accordion-button"
+            class="btn btn-link"
+            type="button"
+            data-toggle="collapse"
+            data-target="#collapse{{recipe.id}}"
+          >
+           <i class="fa-solid fa-arrows-up-down"></i>
+          </button>
+          <a href="/recipe/{{recipe.recipe_id}}">{{recipe.recipe_title}}</a>
+        </h2>
+      </div>
+      <div
+        id="collapse{{recipe.id}}"
+        class="collapse show"
+        data-parent="#accordionExample"
+      >
+        <div class="card-body">{{recipe.recipe_summary|safe}}</div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,78 @@
+{% extends "base.html" %} {% block title %}{{recipe.title}} Recipe{% endblock %}
+{% block content %}
+<div class="container">
+  <div class="card bg-dark text-white">
+    <div style="background-color: black">
+      <img src="{{recipe.image}}" class="card-img recipe-header" />
+    </div>
+    <div class="card-img-overlay">
+      <h5 class="card-title">{{recipe.title}}</h5>
+    </div>
+    {% if recipe.id in saves_id %}
+    <i
+      class="fa-solid fa-heart save-icon"
+      id="save-icon"
+      data-recipe-id="{{recipe.id}}"
+    ></i>
+    {% else %}
+    <i
+      class="fa-regular fa-heart save-icon"
+      id="save-icon"
+      data-recipe-id="{{recipe.id}}"
+    ></i>
+    {% endif %}
+  </div>
+  <table class="table table-hover" style="background-color: #fff">
+    <tbody>
+      <tr>
+        <th scope="row">Summary</th>
+        <td>{{recipe.summary|safe}}</td>
+      </tr>
+      <tr>
+        <th scope="row">Diets</th>
+        <td>
+          {%if recipe.diets|length == 0 %}
+          <span>N/A</span>
+          {% else %} {% for d in recipe.diets %}
+          <span class="badge badge-pill badge-primary">{{d}}</span>
+          {% endfor %} {% endif %}
+        </td>
+      </tr>
+      <tr>
+        <th scope="row">Cuisines</th>
+        <td>
+          {%if recipe.cuisines|length == 0 %}
+          <span>N/A</span>
+          {% else %} {% for c in recipe.cuisines %}
+          <span class="badge badge-pill badge-primary">{{c}}</span>
+          {% endfor %}{% endif %}
+        </td>
+      </tr>
+      <tr>
+        <th scope="row">Source</th>
+        <td>
+          <a href="{{recipe.sourceUrl}}">{{recipe.sourceName}}</a>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <p class="display-4 text-center mt-4">Cooking Instructions</p>
+  <ul class="list-group list-group-flush mb-4">
+    {% if recipe.analyzedInstructions|length == 0 %}
+    <li class="list-group-item">N/A</li>
+    {% else %} {% for step in recipe.analyzedInstructions[0].steps %}
+    <li class="list-group-item">{{step.number}}. {{step.step}}</li>
+    {% endfor %} {% endif %}
+  </ul>
+  <div class="d-flex flex-row justify-content-between">
+    <div class="column">
+      <p class="display-4 text-center">Ingredients</p>
+      <img src="/static/images/ingredients/{{recipe.id}}.png" />
+    </div>
+    <div class="column">
+      <p class="display-4 text-center">Nutrition Label</p>
+      <img src="/static/images/nutritions/{{recipe.id}}.png" />
+    </div>
+  </div>
+</div>
+{% endblock %}

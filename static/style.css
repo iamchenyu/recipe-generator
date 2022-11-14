@@ -1,0 +1,169 @@
+body::before {
+  content: "";
+  background-image: url("/static/images/bg2.jpg");
+  background-size: cover;
+  opacity: 75%;
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  bottom: 0px;
+  left: 0px;
+  z-index: -1;
+}
+
+body {
+  position: relative;
+  background-color: #000;
+  min-height: 100vh;
+  height: 100%;
+}
+
+hr {
+  border: 0;
+  clear: both;
+  display: block;
+  width: 96%;
+  background-color: #888;
+  height: 1px;
+  margin-bottom: 1.5rem;
+}
+
+#spinner {
+  margin-bottom: 40px;
+  color: #fff;
+}
+
+#spinner em {
+  font-size: 2rem;
+  letter-spacing: 2px;
+}
+
+#navbarDropdown {
+  color: #5a5a5a;
+}
+
+.homepage {
+  height: 90vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+#homepage h1 {
+  margin-top: 10px;
+  text-align: center;
+  color: #fff;
+}
+
+#homepage form {
+  width: 100%;
+  margin-top: 20px;
+  margin-bottom: 40px;
+}
+
+#homepage input {
+  width: 85%;
+}
+
+#homepage button {
+  margin-left: auto;
+}
+
+.list-group-item {
+  min-height: 45px;
+}
+
+.recipe-header {
+  width: 100%;
+  height: 500px;
+  object-fit: cover;
+  opacity: 60%;
+}
+
+.card-img-overlay {
+  top: 40%;
+  font-weight: bold;
+  text-align: center;
+}
+
+.card-img-overlay h5 {
+  font-size: 2rem;
+  color: #ebeff3;
+}
+
+.save-icon {
+  font-size: 2rem;
+  position: absolute;
+  top: 0;
+  right: 0;
+  margin: 10px;
+  color: #ebeff3;
+}
+
+#close-accordion-button {
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+
+.checkbox-group {
+  display: grid;
+  grid-template-columns: repeat(2, auto);
+  row-gap: 10px;
+}
+
+#edit-user-password {
+  display: flex;
+  flex-direction: column;
+  margin: 4rem auto auto auto;
+}
+
+#edit-user-password input {
+  margin: 2rem 0 0 0;
+  width: 55%;
+}
+
+#edit-user-password button {
+  width: 30%;
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+}
+
+.footer-basic {
+  padding-top: 40px;
+  color: #fff;
+}
+
+.footer-basic .social {
+  text-align: center;
+}
+
+.footer-basic .social > a {
+  font-size: 24px;
+  width: 40px;
+  height: 40px;
+  line-height: 40px;
+  display: inline-block;
+  text-align: center;
+  border-radius: 50%;
+  border: 1px solid #ccc;
+  margin: 0 8px;
+  color: inherit;
+  opacity: 0.75;
+}
+
+.footer-basic .social > a:hover {
+  opacity: 0.9;
+}
+
+.footer-basic .copyright {
+  margin-top: 15px;
+  text-align: center;
+  font-size: 13px;
+  color: #fff;
+  margin-bottom: 0;
+}
+
+.flash-message {
+  font-size: 1.25rem;
+}

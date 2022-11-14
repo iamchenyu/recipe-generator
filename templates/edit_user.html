@@ -1,0 +1,45 @@
+{% extends "base.html" %} {% block title %}Edit User Page{% endblock %} {% block
+content %}
+<div class="container mt-2" style="background-color: #fff">
+  <h1 class="py-3">Edit User Profile</h1>
+  <form method="POST">
+    {{ form.hidden_tag() }} {% for field in form if field.widget.input_type !=
+    "hidden" and field.name != "password" and field.name != "diet_preferences"
+    %}
+    <div class="form-group">
+      {{field.label}} {{field(class_="form-control")}} {% for error in
+      field.errors %}
+      <small class="form-text text-danger">{{ error }}</small>
+      {% endfor %}
+    </div>
+    {% endfor %}
+    <div class="form-group">
+      {{form.diet_preferences.label}}<br />
+      {% for error in form.diet_preferences.errors %}
+      <small class="form-text text-danger">{{ error }}</small>
+      {% endfor %}
+      <div class="checkbox-group">
+        {% for diet in DIET_CHOICES %}
+        <div class="form-check form-check-inline">
+          <input class="form-check-input" id="diet_preferences-{{diet[0]}}"
+          name="diet_preferences" type="checkbox" value="{{diet[0]}}" {% for idx
+          in user_diets %} {% if idx == diet[0] %} checked {% endif %} {% endfor
+          %} />
+          <label class="form-check-label" for="diet_preferences-{{diet[0]}}"
+            >{{diet[1]}}</label
+          >
+        </div>
+
+        {% endfor %}
+      </div>
+    </div>
+    <div id="edit-user-password">
+      <h4>To confirm changes, enter your password:</h4>
+      {{form.password(class_="form-control", placeholder= "Enter your password to confirm")}} {% for error in form.password.errors %}
+      <small class="form-text text-danger">{{ error }}</small>
+      {% endfor %}
+      <button type="submit" class="btn btn-primary">Submit</button>
+    </div>
+  </form>
+</div>
+{% endblock %}

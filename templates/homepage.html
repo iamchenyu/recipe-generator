@@ -1,0 +1,21 @@
+{% extends "base.html" %} {% block title %}Homepage{% endblock %} {% block
+content %}
+<div class="container homepage" id="homepage">
+  <h1 class="display-4">Ingredients in my fridge...</h1>
+  <form method="POST" id="search-recipe-form" class="d-flex" action="/results">
+    <input
+      type="text"
+      placeholder="broccoli, carrot, chicken..."
+      name="ingredients"
+      class="form-control"
+      id="ingredients-input"
+    />
+    <button class="btn btn-primary">Surprise me!</button>
+  </form>
+  <div class="mx-auto" id="spinner" style="display: none">
+    <em class="display-4">Loading...</em>
+    <div class="spinner-border display-4"></div>
+  </div>
+  <div class="d-flex flex-row flex-wrap" id="homepageRecipes"></div>
+</div>
+{% endblock %}
