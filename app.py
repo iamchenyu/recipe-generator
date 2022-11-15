@@ -6,10 +6,17 @@ from flask_debugtoolbar import DebugToolbarExtension
 from models import db, connect_db, User, Diet, SavedRecipe
 from forms import UserRegisterForm, UserLoginForm, UserEditForm, DIET_CHOICES
 from sqlalchemy.exc import IntegrityError
+from dotenv import load_dotenv
+import werkzeug.exceptions as ex
+
 
 app = Flask(__name__)
 
+load_dotenv()
+API_KEY = os.getenv("PROJECT_API_KEY")
+
 app.config['SECRET_KEY'] = os.environ.get("SECRET_KEY", "temp_key")
+# app.config['API_KEY'] = os.environ.get("API_KEY", PROJECT_API_KEY)
 app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = True
 
 app.config['SQLALCHEMY_DATABASE_URI'] = (
@@ -22,7 +29,6 @@ app.config['SQLALCHEMY_ECHO'] = False
 connect_db(app)
 
 CURR_USER_KEY = "curr_user"
-API_KEY = "30a168e2d53240f7abe84aaa73953bf9"
 BASE_URL = "https://api.spoonacular.com/recipes"
 
 
@@ -53,23 +59,42 @@ def add_header(req):
     req.headers['Cache-Control'] = 'public, max-age=0'
     return req
 
-
+# error handling
 @app.errorhandler(404)
 def not_found(e):
-    res = requests.get("https://http.cat/404")
-    file = open(f"static/images/httpstatus/404.png", "wb")
-    file.write(res.content)
-    file.close()
+    if not os.path.exists("static/images/httpstatus/404.png"):
+        res = requests.get("https://http.cat/404")
+        file = open(f"static/images/httpstatus/404.png", "wb")
+        file.write(res.content)
+        file.close()
     return render_template("404.html"), 404
 
 
 @app.errorhandler(405)
 def method_not_allowed(e):
-    res = requests.get("https://http.cat/405")
-    file = open(f"static/images/httpstatus/405.png", "wb")
-    file.write(res.content)
-    file.close()
+    if not os.path.exists("static/images/httpstatus/405.png"):
+        res = requests.get("https://http.cat/405")
+        file = open(f"static/images/httpstatus/405.png", "wb")
+        file.write(res.content)
+        file.close()
     return render_template("405.html"), 405
+
+
+class apiCallLimit(ex.HTTPException):
+    code = 402
+    description = 'Exceed API Calls Limit'
+
+
+def handle_402(e):
+    if not os.path.exists("static/images/httpstatus/402.png"):
+        res = requests.get("https://http.cat/402")
+        file = open(f"static/images/httpstatus/402.png", "wb")
+        file.write(res.content)
+        file.close()
+    return render_template("402.html")
+
+
+app.register_error_handler(apiCallLimit, handle_402)
 
 
 @app.route("/")
@@ -98,6 +123,7 @@ def register_user():
             db.session.add(user)
             db.session.commit()
             do_login(user)
+            flash(f"Welcome, {user.username}!", "alert alert-info")
             return redirect(url_for("homepage"))
         except IntegrityError as e:
             db.session.rollback()
@@ -118,9 +144,9 @@ def login_user():
     if form.validate_on_submit():
         user = User.authenticate(username=form.username.data,
                                  password=form.password.data)
-        print(user)
         if user:
             do_login(user)
+            flash(f"Welcome back, {user.username}!", "alert alert-info")
             return redirect(url_for("homepage"))
 
         form.password.errors = ["invalid username or password"]
@@ -131,7 +157,8 @@ def login_user():
 @app.route("/logout", methods=["POST"])
 def logout_user():
     do_logout()
-    return redirect(url_for("homepage"))
+    flash(f"Goodbye, {g.user.username}!", "alert alert-info")
+    return redirect(url_for("login_user"))
 
 
 @app.route("/recipes", methods=["POST"])
@@ -139,6 +166,8 @@ def search_recipes():
     ingredients = request.json["ingredients"]
     response = requests.get(
         f"{BASE_URL}/complexSearch?includeIngredients={ingredients}&apiKey={API_KEY}&addRecipeNutrition=true&fillIngredients=true&number=6")
+    if response.status_code == 402:
+        raise apiCallLimit
     return response.json()
 
 
@@ -150,21 +179,25 @@ def get_recipe_details(id):
     # get recipe
     recipe_response = requests.get(
         f"{BASE_URL}/{id}/information?apiKey={API_KEY}")
+    if recipe_response.status_code == 402:
+        raise apiCallLimit
     recipe = recipe_response.json()
     # get user saved recipes id
     saves_id = [save.recipe_id for save in g.user.saves]
     # get ingredients
-    ingredients_response = requests.get(
-        f"{BASE_URL}/{id}/ingredientWidget.png?apiKey={API_KEY}", headers={"Accept": "image/png"})
-    file = open(f"static/images/ingredients/{id}.png", "wb")
-    file.write(ingredients_response.content)
-    file.close()
+    if not os.path.exists(f"static/images/ingredients/{id}.png"):
+        ingredients_response = requests.get(
+            f"{BASE_URL}/{id}/ingredientWidget.png?apiKey={API_KEY}", headers={"Accept": "image/png"})
+        file = open(f"static/images/ingredients/{id}.png", "wb")
+        file.write(ingredients_response.content)
+        file.close()
     # get nutrition label
-    nutrition_response = requests.get(
-        f"{BASE_URL}/{id}/nutritionLabel.png?apiKey={API_KEY}&showIngredients=true", headers={"Content-Type": "image/png"})
-    file2 = open(f"static/images/nutritions/{id}.png", "wb")
-    file2.write(nutrition_response.content)
-    file2.close()
+    if not os.path.exists(f"static/images/nutritions/{id}.png"):
+        nutrition_response = requests.get(
+            f"{BASE_URL}/{id}/nutritionLabel.png?apiKey={API_KEY}&showIngredients=true", headers={"Content-Type": "image/png"})
+        file2 = open(f"static/images/nutritions/{id}.png", "wb")
+        file2.write(nutrition_response.content)
+        file2.close()
     return render_template("recipe.html", recipe=recipe, saves_id=saves_id)
 
 
@@ -221,6 +254,7 @@ def edit_user(id):
             user.diet_preferences = diets
             try:
                 db.session.commit()
+                flash(f"Your profile has been updated", "alert alert-info")
                 return redirect(url_for("homepage"))
             except IntegrityError as e:
                 db.session.rollback()

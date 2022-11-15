@@ -23,12 +23,12 @@
   <body>
     {% with messages=get_flashed_messages(with_categories=true) %} {% if
     messages %} {% for category, msg in messages %}
-    <div class="{{category}} mt-2 font-weight-bold text-muted flash-message">
+    <div class="{{category}} font-weight-bold text-muted flash-message">
       {{msg}}
     </div>
     {% endfor %} {% endif %} {% endwith %}
     <div
-      class="container d-flex flex-column align-items-center justify-content-center vh-100"
+      class="container-flex container d-flex flex-column align-items-center justify-content-center"
     >
      <div
         style="background-color: #ebeff3; width: 50%; border-radius: 30px"

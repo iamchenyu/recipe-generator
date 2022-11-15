@@ -1,6 +1,6 @@
 {% extends "base.html" %} {% block title %}{{recipe.title}} Recipe{% endblock %}
 {% block content %}
-<div class="container">
+<div class="container-flex container">
   <div class="card bg-dark text-white">
     <div style="background-color: black">
       <img src="{{recipe.image}}" class="card-img recipe-header" />
@@ -22,6 +22,7 @@
     ></i>
     {% endif %}
   </div>
+
   <table class="table table-hover" style="background-color: #fff">
     <tbody>
       <tr>

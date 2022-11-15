@@ -23,12 +23,12 @@
   <body>
     {% with messages=get_flashed_messages(with_categories=true) %} {% if
     messages %} {% for category, msg in messages %}
-    <div class="{{category}} mt-2 font-weight-bold text-muted flash-message">
+    <div class="{{category}} font-weight-bold text-muted flash-message">
       {{msg}}
     </div>
     {% endfor %} {% endif %} {% endwith %}
     <div
-      class="container d-flex flex-column align-items-center justify-content-center"
+      class="container-flex container d-flex flex-column align-items-center justify-content-center"
     >
       <div
         style="background-color: #ebeff3; width: 70%; border-radius: 30px"
@@ -88,8 +88,8 @@
           >Already have an account? <a href="/login">Login here.</a></small
         >
       </div>
-      {% include "footer.html" %}
     </div>
+    {% include "footer.html" %}
     <script
       src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
       integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"

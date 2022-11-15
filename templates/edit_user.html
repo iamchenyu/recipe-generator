@@ -1,6 +1,6 @@
 {% extends "base.html" %} {% block title %}Edit User Page{% endblock %} {% block
 content %}
-<div class="container mt-2" style="background-color: #fff">
+<div class="container-flex container mt-2" style="background-color: #fff">
   <h1 class="py-3">Edit User Profile</h1>
   <form method="POST">
     {{ form.hidden_tag() }} {% for field in form if field.widget.input_type !=
@@ -35,7 +35,8 @@ content %}
     </div>
     <div id="edit-user-password">
       <h4>To confirm changes, enter your password:</h4>
-      {{form.password(class_="form-control", placeholder= "Enter your password to confirm")}} {% for error in form.password.errors %}
+      {{form.password(class_="form-control", placeholder= "*******")}} {% for
+      error in form.password.errors %}
       <small class="form-text text-danger">{{ error }}</small>
       {% endfor %}
       <button type="submit" class="btn btn-primary">Submit</button>

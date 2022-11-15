@@ -23,7 +23,7 @@
   <body>
     {% with messages=get_flashed_messages(with_categories=true) %} {% if
     messages %} {% for category, msg in messages %}
-    <div class="{{category}} mt-2 font-weight-bold text-muted flash-message">
+    <div class="{{category}} font-weight-bold text-muted flash-message">
       {{msg}}
     </div>
     {% endfor %} {% endif %} {% endwith %} {% include "nav.html" %} {% block
