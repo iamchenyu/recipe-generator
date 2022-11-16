@@ -57,18 +57,15 @@ class DietPreference(db.Model):
 class SavedRecipe(db.Model):
     __tablename__ = "saved_recipes"
 
-    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    recipe_id = db.Column(db.Integer, nullable=False)
+    recipe_id = db.Column(db.Integer, nullable=False, primary_key=True)
     recipe_title = db.Column(db.Text, nullable=False)
     recipe_summary = db.Column(db.Text)
     recipe_calories = db.Column(db.Integer)
-    user_id = db.Column(db.Integer, db.ForeignKey("users.id"))
-
-    diet_categories = db.relationship(
-        "Diet", lazy='subquery', secondary="diet_categories", backref="recipes")
+    user_id = db.Column(db.Integer, db.ForeignKey(
+        "users.id"), primary_key=True)
 
     def __repr__(self):
-        return f"<Saved Recipe #{self.id}: {self.recipe_title}, #{self.recipe_id}>"
+        return f"<Saved Recipe #{self.recipe_id}: {self.recipe_title} By User #{self.user_id}>"
 
 
 class Diet(db.Model):
@@ -79,15 +76,3 @@ class Diet(db.Model):
 
     def __repr__(self):
         return f"<Diet #{self.id}: {self.diet_label}>"
-
-
-class DietCategory(db.Model):
-    __tablename__ = "diet_categories"
-
-    recipe_id = db.Column(db.Integer, db.ForeignKey(
-        "saved_recipes.recipe_id"), primary_key=True)
-    diet_id = db.Column(db.Integer, db.ForeignKey(
-        "diets.id"), primary_key=True)
-
-    def __repr__(self):
-        return f"<Diet Category: Recipe #{self.recipe_id} - Diet #{self.diet_id}>"

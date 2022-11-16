@@ -213,10 +213,6 @@ def save_recipe(id):
     recipe = recipe_response.json()
     saved_recipe = SavedRecipe(
         recipe_id=recipe["id"], recipe_title=recipe["title"], recipe_summary=recipe["summary"], recipe_calories=recipe["nutrition"]["nutrients"][0]["amount"], user_id=session[CURR_USER_KEY])
-    diets = [Diet.query.filter(Diet.diet_label == diet).first()
-             for diet in recipe["diets"]]
-    diet_labels = [diet for diet in diets if diet is not None]
-    saved_recipe.diet_categories.extend(diet_labels)
     db.session.add(saved_recipe)
     db.session.commit()
     return jsonify({"message": "success"})
@@ -224,7 +220,8 @@ def save_recipe(id):
 
 @app.route("/recipe/<int:id>/unsave", methods=["POST"])
 def unsave_recipe(id):
-    recipe = SavedRecipe.query.filter(SavedRecipe.recipe_id == id).first()
+    recipe = SavedRecipe.query.filter(
+        SavedRecipe.recipe_id == id, SavedRecipe.user_id == g.user.id).first()
     db.session.delete(recipe)
     db.session.commit()
     return jsonify({"message": "success"})
@@ -251,7 +248,6 @@ def edit_user(id):
 
     if form.validate_on_submit():
         if User.authenticate(username=user.username, password=form.password.data):
-            print("validated")
             user.username = form.username.data
             user.email = form.email.data
             diets = [Diet.query.get(diet)
