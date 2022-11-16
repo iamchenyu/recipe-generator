@@ -16,7 +16,7 @@ load_dotenv()
 API_KEY = os.getenv("PROJECT_API_KEY")
 
 app.config['SECRET_KEY'] = os.environ.get("SECRET_KEY", "temp_key")
-# app.config['API_KEY'] = os.environ.get("API_KEY", PROJECT_API_KEY)
+app.config['API_KEY'] = os.environ.get("API_KEY", API_KEY)
 app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = True
 
 app.config['SQLALCHEMY_DATABASE_URI'] = (
