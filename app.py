@@ -66,21 +66,19 @@ def add_header(req):
 # error handling
 @app.errorhandler(404)
 def not_found(e):
-    if not os.path.exists("static/images/httpstatus/404.png"):
-        res = requests.get("https://http.cat/404")
-        file = open(f"static/images/httpstatus/404.png", "wb")
-        file.write(res.content)
-        file.close()
+    res = requests.get("https://http.cat/404")
+    file = open(f"static/images/httpstatus/404.png", "wb")
+    file.write(res.content)
+    file.close()
     return render_template("404.html"), 404
 
 
 @app.errorhandler(405)
 def method_not_allowed(e):
-    if not os.path.exists("static/images/httpstatus/405.png"):
-        res = requests.get("https://http.cat/405")
-        file = open(f"static/images/httpstatus/405.png", "wb")
-        file.write(res.content)
-        file.close()
+    res = requests.get("https://http.cat/405")
+    file = open(f"static/images/httpstatus/405.png", "wb")
+    file.write(res.content)
+    file.close()
     return render_template("405.html"), 405
 
 
@@ -90,11 +88,10 @@ class apiCallLimit(ex.HTTPException):
 
 
 def handle_402(e):
-    if not os.path.exists("static/images/httpstatus/402.png"):
-        res = requests.get("https://http.cat/402")
-        file = open(f"static/images/httpstatus/402.png", "wb")
-        file.write(res.content)
-        file.close()
+    res = requests.get("https://http.cat/402")
+    file = open(f"static/images/httpstatus/402.png", "wb")
+    file.write(res.content)
+    file.close()
     return render_template("402.html")
 
 
@@ -189,19 +186,17 @@ def get_recipe_details(id):
     # get user saved recipes id
     saves_id = [save.recipe_id for save in g.user.saves]
     # get ingredients
-    if not os.path.exists(f"static/images/ingredients/{id}.png"):
-        ingredients_response = requests.get(
-            f"{BASE_URL}/{id}/ingredientWidget.png?apiKey={API_KEY}", headers={"Accept": "image/png"})
-        file = open(f"static/images/ingredients/{id}.png", "wb")
-        file.write(ingredients_response.content)
-        file.close()
+    ingredients_response = requests.get(
+        f"{BASE_URL}/{id}/ingredientWidget.png?apiKey={API_KEY}", headers={"Accept": "image/png"})
+    file = open(f"static/images/ingredients/{id}.png", "wb")
+    file.write(ingredients_response.content)
+    file.close()
     # get nutrition label
-    if not os.path.exists(f"static/images/nutritions/{id}.png"):
-        nutrition_response = requests.get(
-            f"{BASE_URL}/{id}/nutritionLabel.png?apiKey={API_KEY}&showIngredients=true", headers={"Content-Type": "image/png"})
-        file2 = open(f"static/images/nutritions/{id}.png", "wb")
-        file2.write(nutrition_response.content)
-        file2.close()
+    nutrition_response = requests.get(
+        f"{BASE_URL}/{id}/nutritionLabel.png?apiKey={API_KEY}&showIngredients=true", headers={"Content-Type": "image/png"})
+    file2 = open(f"static/images/nutritions/{id}.png", "wb")
+    file2.write(nutrition_response.content)
+    file2.close()
     return render_template("recipe.html", recipe=recipe, saves_id=saves_id)
 
 
