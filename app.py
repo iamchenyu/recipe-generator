@@ -14,7 +14,8 @@ import werkzeug.exceptions as ex
 app = Flask(__name__)
 
 load_dotenv()
-API_KEY = os.getenv("PROJECT_API_KEY")
+API_KEY = os.getenv("API_KEY")
+
 uri = (
     os.environ.get('DATABASE_URL', 'postgresql:///recipe_generator'))
 if uri.startswith("postgres://"):
@@ -23,7 +24,7 @@ if uri.startswith("postgres://"):
 app.config['SECRET_KEY'] = os.environ.get("SECRET_KEY", "temp_key")
 app.config['API_KEY'] = os.environ.get("API_KEY", API_KEY)
 app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = True
-
+print(os.environ.get("API_KEY"))
 app.config['SQLALCHEMY_DATABASE_URI'] = uri
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_ECHO'] = False
