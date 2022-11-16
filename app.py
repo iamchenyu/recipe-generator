@@ -67,7 +67,7 @@ def add_header(req):
 @app.errorhandler(404)
 def not_found(e):
     res = requests.get("https://http.cat/404")
-    file = open(f"static/images/httpstatus/404.png", "wb")
+    file = open("static/images/httpstatus/404.png", "wb")
     file.write(res.content)
     file.close()
     return render_template("404.html"), 404
@@ -76,7 +76,7 @@ def not_found(e):
 @app.errorhandler(405)
 def method_not_allowed(e):
     res = requests.get("https://http.cat/405")
-    file = open(f"static/images/httpstatus/405.png", "wb")
+    file = open("static/images/httpstatus/405.png", "wb")
     file.write(res.content)
     file.close()
     return render_template("405.html"), 405
@@ -89,7 +89,7 @@ class apiCallLimit(ex.HTTPException):
 
 def handle_402(e):
     res = requests.get("https://http.cat/402")
-    file = open(f"static/images/httpstatus/402.png", "wb")
+    file = open("static/images/httpstatus/402.png", "wb")
     file.write(res.content)
     file.close()
     return render_template("402.html")
