@@ -58,7 +58,7 @@ class SavedRecipe(db.Model):
     __tablename__ = "saved_recipes"
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    recipe_id = db.Column(db.Integer, nullable=False, unique=True)
+    recipe_id = db.Column(db.Integer, nullable=False)
     recipe_title = db.Column(db.Text, nullable=False)
     recipe_summary = db.Column(db.Text)
     recipe_calories = db.Column(db.Integer)
