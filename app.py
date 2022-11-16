@@ -1,4 +1,5 @@
 import os
+import re
 import requests
 
 from flask import Flask, render_template, flash, redirect, session, g, jsonify, url_for, request
@@ -14,13 +15,16 @@ app = Flask(__name__)
 
 load_dotenv()
 API_KEY = os.getenv("PROJECT_API_KEY")
+uri = (
+    os.environ.get('DATABASE_URL', 'postgresql:///recipe_generator'))
+if uri.startswith("postgres://"):
+    uri = uri.replace("postgres://", "postgresql://", 1)
 
 app.config['SECRET_KEY'] = os.environ.get("SECRET_KEY", "temp_key")
 app.config['API_KEY'] = os.environ.get("API_KEY", API_KEY)
 app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = True
 
-app.config['SQLALCHEMY_DATABASE_URI'] = (
-    os.environ.get('DATABASE_URL', 'postgresql:///recipe_generator'))
+app.config['SQLALCHEMY_DATABASE_URI'] = uri
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_ECHO'] = False
 
