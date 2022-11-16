@@ -1,10 +1,8 @@
 const handleRecipeSearch = async (e) => {
   e.preventDefault();
-  console.log("here");
   $("#spinner").show();
   const ingredients = $("#ingredients-input").val();
   const { data } = await axios.post("/recipes", { ingredients: ingredients });
-  console.log(data);
   if (typeof data === "object") {
     homepageRecipesMarkup(data);
   } else {
@@ -18,8 +16,6 @@ const homepageRecipesMarkup = (data) => {
   $("#homepage").removeClass("homepage");
   $("#homepageRecipes").empty();
   $("#spinner").hide();
-  console.log(data);
-  console.log(data.results);
   if (data.results.length === 0) {
     const results = $(
       "<div class='text-white mb-5 mx-3' >No results found. Please try again.</div>"
